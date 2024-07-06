@@ -1,0 +1,109 @@
+spring:
+  data:
+    mongodb:
+      database: realEstate
+      host: mongo  # Docker Compose 환경의 서비스 이름으로 변경
+      port: 27017
+      authentication-database: admin
+      username: test
+      password: test
+  redis:
+    host:  real-estate-redis
+    port: 6379
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${AWS.RDS}
+    username: ${AWS.USERNAME}
+    password: ${AWS.PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: profile, email
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            scope: profile_nickname, profile_image, account_email
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/kakao"
+            client-authentication-method: POST
+          naver:
+            client-id: ${NAVER_CLIENT_ID}
+            client-secret: ${NAVER_CLIENT_SECRET}
+            client-name: Naver
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/naver"
+
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+          naver:
+            authorization-uri: https://nid.naver.com/oauth2.0/authorize
+            token-uri: https://nid.naver.com/oauth2.0/token
+            user-info-uri: https://openapi.naver.com/v1/nid/me
+            user-name-attribute: response
+  kafka:
+    bootstrap-servers: localhost:9092  # Docker Compose 환경의 서비스 이름으로 변경
+    template:
+      default-topic: realestate
+
+jwt:
+  secret-key: ${JWT_SECRET}
+  # 30 days
+  token:
+    expired-time-ms: 2592000000
+  refresh:
+    expiration: 604800000
+    header: Refresh-Token
+  access:
+    header: Authorization
+    expiration: 604800000
+
+cloud:
+  aws:
+    s3:
+      bucket: inho
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+chatgpt:
+  api-key: ${CHATGPT_API_KEY}
+  model: text-davinci-003
+
+openai:
+  url:
+    model: https://api.openai.com/v1/models
+    model-list: https://api.openai.com/v1/models/
+    legacy-prompt: https://api.openai.com/v1/completions
+    prompt: https://api.openai.com/v1/chat/completions
+
+image:
+  save_path: ./images
+
+api:
+  building-key: ${GET_BUILDING_API_KEY}
+  land-key: ${GET_LAND_API_KEY}
+
+iamport:
+  key: ${IAM_PORT_KEY}
+  secret: ${IAM_PORT_SECRET}

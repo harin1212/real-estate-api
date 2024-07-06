@@ -1,5 +1,6 @@
 package com.realEstate.realEstate.service;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.realEstate.exception.ApplicationException;
 import com.realEstate.exception.ErrorCode;
 import com.realEstate.realEstate.controller.response.Response;
@@ -11,8 +12,10 @@ import com.realEstate.realEstate.repository.UserRepository;
 import com.realEstate.realEstate.repository.cacheRepository.UserCacheRepository;
 import com.realEstate.realEstate.util.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.Temperature;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -48,12 +52,26 @@ public class UserService implements UserDetailsService {
         return UserDto.from(user);
     }
 
-    @Transactional(readOnly = true)
-    public boolean checkUserEmail(String email) {
-        Optional<User> existingUser = userRepository.findByEmail(email);
-        return !existingUser.isPresent();
+    /**
+     * 이메일 중복 확인
+     * @param email
+     */
+    public Response<String> checkUserEmail(String email) throws Exception{
+        try {
+            // 이메일이 중복 검증
+            Optional<User> userOptional = userRepository.findByEmail(email);
+            log.info("이메일 = {}", userOptional);
+            log.info("이메일 = {}", userRepository.findByEmail(email));
+            if (userOptional.isEmpty()) {
+                return Response.success("사용 가능한 이메일입니다.");
+            }
+            else {
+                return Response.error("중복된 이메일 입니다.");
+            }
+        } catch (Exception e) {
+            throw new Exception("이메일 중복인지 확인할 수 없습니다.");
+        }
     }
-
 
     @Transactional
     public UserDto join(String userName, String nickName, String password, String email, Gender gender, int age) {

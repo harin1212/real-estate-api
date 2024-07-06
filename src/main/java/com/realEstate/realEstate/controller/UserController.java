@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @Slf4j
 @RequestMapping("/realEstate/user")
@@ -31,18 +33,11 @@ public class UserController {
 
     /**
      * 이메일 중복체크
-     * @param email
-     * @return
      */
     @PostMapping("/emailcheck")
-    public Response<String> checkUserEmail(@RequestBody String email) {
-        boolean isEmailAvailable = userService.checkUserEmail(email);
-
-        if (isEmailAvailable) {
-            return Response.success("사용 가능한 이메일입니다.");
-        } else {
-           throw new NotFoundException("중복된 이메일 입니다.");
-        }
+    public Response<String> checkUserEmail(@RequestBody Map<String, String> request) throws Exception {
+        String email = request.get("email");
+        return userService.checkUserEmail(email);
     }
 
     /**
@@ -50,7 +45,6 @@ public class UserController {
      * @param request
      * @return
      */
-
     @PostMapping("/join")
     public Response<UserJoinResponse> join(@RequestBody UserJoinRequest request) {
         UserDto dto = userService.join(request.getName(), request.getNickName(), request.getPassword(), request.getEmail(), request.getGender(), request.getAge());
