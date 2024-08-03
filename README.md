@@ -10,7 +10,7 @@
 - 배포 URL : https://www.budong.kr/
 - 한국인(임대인)
     - Test ID : test@gmail.com
-    - Test PW : qqqqqqqq!
+    - Test PW : 0000
 - 외국인(임차인) 
     - Test ID : foreigner@gmail.com
     - Test PW : 0000
