@@ -1,4 +1,4 @@
-# 부동맞춤🏡 : 외국인 비대면 부동산 거래 서비스
+# 부동맞춤🏡 : 외국인 비대면 부동산 전자계약 서비스
 <div style="display: flex; justify-content: center; gap: 20px;">
   <img src="https://github.com/real-estate-contract/real-estate-front/assets/99604087/13e626fb-4d4a-4817-b554-d465e48baea4" style="border-radius: 15px; width: 20%;">
   <img src="https://github.com/real-estate-contract/real-estate-front/assets/99604087/35142afd-087c-4f25-aebf-211581898571" style="border-radius: 15px; width: 20%;">
