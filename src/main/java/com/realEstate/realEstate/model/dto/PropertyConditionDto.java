@@ -36,6 +36,11 @@ public class PropertyConditionDto implements Serializable {
     Long propertyId;
 
     public static PropertyConditionDto from(PropertyCondition entity) {
+        if (entity == null) {
+            // Null 처리
+            throw new IllegalArgumentException("PropertyCondition cannot be null");
+            // 또는 return null;
+        }
         return new PropertyConditionDto(
                 entity.getId(),
                 entity.getLineMemo(),
